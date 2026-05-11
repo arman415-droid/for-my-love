@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favorite Person</title>
+    <style>
+        /* Reset & Base Style */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            /* MENGUBAH BACKGROUND MENJADI BIRU */
+            background: linear-gradient(135deg, #001f3f, #0074D9); /* Gradasi Biru Navy ke Biru Cerah */
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        /* Container Animasi Nailong */
+        .nailong-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .nailong {
+            position: absolute;
+            top: -100px;
+            width: 50px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Konten Utama */
+        .card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.15); /* Dibuat lebih terang sedikit agar pas dengan background biru */
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            backdrop-filter: blur(15px); /* Efek kaca (Glassmorphism) */
+            width: 90%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h3 { 
+            font-weight: 400; 
+            margin-bottom: 20px; 
+            letter-spacing: 0.5px; 
+            line-height: 1.4;
+            font-size: 18px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: #fff;
+            color: #001f3f; /* Warna teks tombol biru tua */
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover { 
+            background: #f0f0f0; 
+            transform: translateY(-2px);
+        }
+
+        #errorMsg { color: #ffbcbc; font-size: 13px; margin-top: 10px; }
+
+        /* Video Area */
+        #videoSegment { 
+            display: none; 
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+
+        video { 
+            width: 100%; 
+            height: auto; 
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+            border-radius: 15px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.3); 
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Area Nailong Melayang -->
+    <div class="nailong-container" id="fallingNailong"></div>
+
+    <!-- Segmen 1: Password -->
+    <div id="passwordSegment" class="card">
+        <h3>hai rizka indah wijayanti.<br>password nya tanggal after demo.</h3>
+        <input type="password" id="passInput" placeholder="DDMMYY">
+        <button onclick="checkPassword()">lanjutkan</button>
+        <p id="errorMsg"></p>
+    </div>
+
+    <!-- Segmen 2: Video -->
+    <div id="videoSegment" class="card">
+        <h3>I'm sorry if I keep making you sad. I know I have many flaws, but thank you for loving me anyway.</h3>
+        <div class="video-wrapper">
+            <video id="myVideo" controls>
+                <source src="video.mp4" type="video/mp4">
+                Browser kamu tidak mendukung video.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('fallingNailong');
+        const nailongCount = 15;
+
+        for (let i = 0; i < nailongCount; i++) {
+            createNailong();
+        }
+
+        function createNailong() {
+            const nailong = document.createElement('img');
+            nailong.src = 'nailong.jpeg'; 
+            nailong.classList.add('nailong');
+            
+            nailong.style.left = Math.random() * 100 + "vw";
+            nailong.style.animationDuration = (Math.random() * 3 + 4) + "s"; 
+            nailong.style.opacity = Math.random() * 0.5 + 0.3;
+            nailong.style.width = (Math.random() * 30 + 40) + "px";
+
+            container.appendChild(nailong);
+
+            nailong.addEventListener('animationiteration', () => {
+                nailong.style.left = Math.random() * 100 + "vw";
+            });
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passInput').value;
+            const correctPass = "310825";
+
+            if (input === correctPass) {
+                document.getElementById('passwordSegment').style.display = 'none';
+                document.getElementById('videoSegment').style.display = 'flex';
+                document.getElementById('myVideo').play();
+            } else {
+                document.getElementById('errorMsg').innerText = "Tanggal tidak cocok, coba lagi.";
+            }
+        }
+    </script>
+</body>
+</html>
